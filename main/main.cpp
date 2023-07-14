@@ -680,7 +680,8 @@ void Main::test_cleanup() {
 int Main::test_entrypoint(int argc, char *argv[], bool &tests_need_run) {
 #ifdef TESTS_ENABLED
 	for (int x = 0; x < argc; x++) {
-		if ((strncmp(argv[x], "--test", 6) == 0) && (strlen(argv[x]) == 6)) {
+		if ((strncmp(argv[x], "--test", 6) == 0) && (strlen(argv[x]) == 6) ||
+		   ((strncmp(argv[x], "-tc=",   4) == 0) && (strlen(argv[x]) >  4))) {
 			tests_need_run = true;
 			// TODO: need to come up with different test contexts.
 			// Not every test requires high-level functionality like `ClassDB`.
