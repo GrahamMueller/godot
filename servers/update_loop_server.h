@@ -55,6 +55,11 @@ protected:
 public:
 
 	virtual void OnUpdate(float realTime, float gameTime){;}
+	virtual void PrePhysicsUpdate(float realTime, float gameTime){;}
+	virtual void PhysicsUpdate(float realTime, float gameTime){;}
+	virtual void PostPhysicsUpdate(float realTime, float gameTime){;}
+	virtual void PreRenderUpdate(float realTime, float gameTime){;}
+	virtual void PostUpdate(float realTime, float gameTime){;}
 };
 
 
@@ -66,6 +71,12 @@ public:
 	void AddToUpdate(UpdateServer* server);
 	void RemoveFromUpdate(UpdateServer* server);
 	void Update(double realTime, double gameTime);
+	void OnUpdate(float realTime, float gameTime);
+	void PrePhysicsUpdate(float realTime, float gameTime);
+	void PhysicsUpdate(float realTime, float gameTime);
+	void PostPhysicsUpdate(float realTime, float gameTime);
+	void PreRenderUpdate(float realTime, float gameTime);
+	void PostUpdate(float realTime, float gameTime);
 private:
 	std::vector<UpdateServer*> updateList;
 protected:

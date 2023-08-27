@@ -3380,6 +3380,7 @@ bool Main::iteration() {
 	// process all our active interfaces
 	XRServer::get_singleton()->_process();
 
+	UpdateLoopServer::get_singleton()->PrePhysicsUpdate(process_step, process_step * time_scale);
 	for (int iters = 0; iters < advance.physics_steps; ++iters) {
 		if (Input::get_singleton()->is_using_input_buffering() && agile_input_event_flushing) {
 			Input::get_singleton()->flush_buffered_events();
@@ -3417,7 +3418,7 @@ bool Main::iteration() {
 
 		PhysicsServer2D::get_singleton()->end_sync();
 		PhysicsServer2D::get_singleton()->step(physics_step * time_scale);
-
+		UpdateLoopServer::get_singleton()->PhysicsUpdate(physics_step, physics_step * time_scale);
 		message_queue->flush();
 
 		physics_process_ticks = MAX(physics_process_ticks, OS::get_singleton()->get_ticks_usec() - physics_begin); // keep the largest one for reference
@@ -3426,7 +3427,7 @@ bool Main::iteration() {
 
 		Engine::get_singleton()->_in_physics = false;
 	}
-
+	UpdateLoopServer::get_singleton()->PostPhysicsUpdate(process_step, process_step * time_scale);
 	if (Input::get_singleton()->is_using_input_buffering() && agile_input_event_flushing) {
 		Input::get_singleton()->flush_buffered_events();
 	}
@@ -3439,6 +3440,8 @@ bool Main::iteration() {
 	UpdateLoopServer::get_singleton()->Update(process_step, process_step * time_scale);
 	message_queue->flush();
 
+
+	UpdateLoopServer::get_singleton()->PreRenderUpdate(process_step, process_step * time_scale);
 	RenderingServer::get_singleton()->sync(); //sync if still drawing from previous frames.
 
 	if (DisplayServer::get_singleton()->can_any_window_draw() &&
@@ -3465,6 +3468,7 @@ bool Main::iteration() {
 
 	AudioServer::get_singleton()->update();
 
+	UpdateLoopServer::get_singleton()->PostUpdate(process_step, process_step * time_scale);
 	if (EngineDebugger::is_active()) {
 		EngineDebugger::get_singleton()->iteration(frame_time, process_ticks, physics_process_ticks, physics_step);
 	}

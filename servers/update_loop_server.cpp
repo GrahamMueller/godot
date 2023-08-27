@@ -84,6 +84,91 @@ void UpdateLoopServer::Update(double realTime, double gameTime) {
 	}
 }
 
+void UpdateLoopServer::PrePhysicsUpdate(float realTime, float gameTime) {
+	std::vector<UpdateServer*> removeList = {};
+	for (auto e : this->updateList) {
+		if (e == nullptr)
+		{
+			removeList.emplace_back(e);
+		}
+		else {
+			e->PrePhysicsUpdate(realTime, gameTime);
+		}
+
+	}
+	for (auto e : removeList) {
+		RemoveFromUpdate(e);
+	}
+}
+
+void UpdateLoopServer::PhysicsUpdate(float realTime, float gameTime) {
+	std::vector<UpdateServer*> removeList = {};
+	for (auto e : this->updateList) {
+		if (e == nullptr)
+		{
+			removeList.emplace_back(e);
+		}
+		else {
+			e->PhysicsUpdate(realTime, gameTime);
+		}
+
+	}
+	for (auto e : removeList) {
+		RemoveFromUpdate(e);
+	}
+}
+
+void UpdateLoopServer::PostPhysicsUpdate(float realTime, float gameTime) {
+	std::vector<UpdateServer*> removeList = {};
+	for (auto e : this->updateList) {
+		if (e == nullptr)
+		{
+			removeList.emplace_back(e);
+		}
+		else {
+			e->PostPhysicsUpdate(realTime, gameTime);
+		}
+
+	}
+	for (auto e : removeList) {
+		RemoveFromUpdate(e);
+	}
+}
+
+void UpdateLoopServer::PreRenderUpdate(float realTime, float gameTime) {
+	std::vector<UpdateServer*> removeList = {};
+	for (auto e : this->updateList) {
+		if (e == nullptr)
+		{
+			removeList.emplace_back(e);
+		}
+		else {
+			e->PreRenderUpdate(realTime, gameTime);
+		}
+
+	}
+	for (auto e : removeList) {
+		RemoveFromUpdate(e);
+	}
+}
+
+void UpdateLoopServer::PostUpdate(float realTime, float gameTime) {
+	std::vector<UpdateServer*> removeList = {};
+	for (auto e : this->updateList) {
+		if (e == nullptr)
+		{
+			removeList.emplace_back(e);
+		}
+		else {
+			e->PostUpdate(realTime, gameTime);
+		}
+
+	}
+	for (auto e : removeList) {
+		RemoveFromUpdate(e);
+	}
+}
+
 // void UpdateLoopServer::_bind_methods() {
 // 	// ClassDB::bind_method(D_METHOD("get_feed", "index"), &UpdateLoopServer::get_feed);
 //  //  	ClassDB::bind_method(D_METHOD("get_feed_count"), &UpdateLoopServer::get_feed_count);
