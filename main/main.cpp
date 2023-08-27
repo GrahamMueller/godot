@@ -107,6 +107,7 @@
 #endif // TOOLS_ENABLED
 
 #include "modules/modules_enabled.gen.h" // For mono.
+#include "servers/update_loop_server.h"
 
 #if defined(MODULE_MONO_ENABLED) && defined(TOOLS_ENABLED)
 #include "modules/mono/editor/bindings_generator.h"
@@ -121,6 +122,7 @@
 // Singletons
 
 // Initialized in setup()
+static UpdateLoopServer *updateLoopServer = nullptr;
 static Engine *engine = nullptr;
 static ProjectSettings *globals = nullptr;
 static Input *input = nullptr;
@@ -732,7 +734,9 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 	// platforms, it's used to set up the time utilities.
 	OS::get_singleton()->benchmark_begin_measure("startup_begin");
 
+
 	engine = memnew(Engine);
+	updateLoopServer = memnew(UpdateLoopServer);
 
 	MAIN_PRINT("Main: Initialize CORE");
 	OS::get_singleton()->benchmark_begin_measure("core");
@@ -3432,6 +3436,7 @@ bool Main::iteration() {
 	if (OS::get_singleton()->get_main_loop()->process(process_step * time_scale)) {
 		exit = true;
 	}
+	UpdateLoopServer::get_singleton()->Update(process_step, process_step * time_scale);
 	message_queue->flush();
 
 	RenderingServer::get_singleton()->sync(); //sync if still drawing from previous frames.
