@@ -736,7 +736,6 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 
 
 	engine = memnew(Engine);
-	updateLoopServer = memnew(UpdateLoopServer);
 
 	MAIN_PRINT("Main: Initialize CORE");
 	OS::get_singleton()->benchmark_begin_measure("core");
@@ -815,6 +814,8 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 		packed_data = memnew(PackedData);
 	}
 
+
+	updateLoopServer = memnew(UpdateLoopServer);
 #ifdef MINIZIP_ENABLED
 
 	//XXX: always get_singleton() == 0x0
